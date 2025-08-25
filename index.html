@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stop the Race Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 30px; }
+        video { width: 80%; max-width: 600px; margin: 20px 0; }
+        input, button { font-size: 16px; padding: 8px; margin: 5px; }
+        table { margin: 20px auto; border-collapse: collapse; width: 80%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Stop the Race!</h1>
+    <p>Each participant enters their name and presses STOP when they think the horses have run about half to one horse-length.</p>
+
+    <input type="text" id="participantName" placeholder="Enter your name">
+    <button onclick="stopTimer()">STOP</button>
+
+    <video id="raceVideo" width="600" controls autoplay>
+        <source src="horse_race.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h2>Reaction Times</h2>
+    <table id="resultsTable">
+        <tr><th>Name</th><th>Reaction Time (seconds)</th></tr>
+    </table>
+
+    <script>
+        let videoStartTime;
+        const video = document.getElementById('raceVideo');
+
+        video.onplay = function() {
+            videoStartTime = new Date().getTime();
+        };
+
+        function stopTimer() {
+            const name = document.getElementById('participantName').value.trim();
+            if (!name || !videoStartTime) {
+                alert("Please enter your name and wait for the video to start.");
+                return;
+            }
+            const stopTime = new Date().getTime();
+            const reactionTime = ((stopTime - videoStartTime) / 1000).toFixed(3);
+
+            const table = document.getElementById('resultsTable');
+            const newRow = table.insertRow();
+            const nameCell = newRow.insertCell(0);
+            const timeCell = newRow.insertCell(1);
+            nameCell.textContent = name;
+            timeCell.textContent = reactionTime;
+        }
+    </script>
+</body>
+</html>
